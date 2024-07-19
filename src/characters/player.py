@@ -7,7 +7,7 @@ class Player:
         self.image = image
         self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)
-        self.speed = 5
+        self.speed = 1
         self.direction = pygame.Vector2(0, 0)
 
     def update(self):
