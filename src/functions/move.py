@@ -2,9 +2,7 @@ import pygame
 
 
 def move_player(event, character):
-    if event.type == pygame.QUIT:
-        running = False
-    elif event.type == pygame.KEYDOWN:
+    if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_LEFT:
             character.direction.x = -1
         elif event.key == pygame.K_RIGHT:

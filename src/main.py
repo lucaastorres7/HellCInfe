@@ -1,5 +1,6 @@
 from settings import SCREEN_WIDTH, SCREEN_HEIGHT, PLAYER_IMAGE, ROCK_IMAGE
 from characters.static_objects import StaticObject
+from functions.collision import collision
 from functions.move import move_player
 from characters.player import Player
 import pygame
@@ -26,15 +27,12 @@ while running:
 
     character.update()
 
-    if character.rect.colliderect(rock.rect):
-        print("Collision detected!")
-        character.direction = pygame.Vector2(0, 0)
-        character.rect.topleft = (0, 300)
-
     screen.fill((0, 45, 0))
 
     character.draw(screen)
     rock.draw(screen)
+
+    collision(character, rock)
 
     pygame.display.flip()
 
