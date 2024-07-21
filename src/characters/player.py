@@ -20,6 +20,13 @@ class Player(pygame.sprite.Sprite):
             img_atk = PLAYER_SPRITESHEET.subsurface((i * 16, 32), (16, 16))
             img_atk = pygame.transform.scale(img_atk, (16 * 5, 16 * 5))
             self.attack_sprt.append(img_atk)
+        
+        self.moving_sprt = []
+        self.is_moving = False
+        for i in range(4):
+            img_moving = PLAYER_SPRITESHEET.subsurface((i * 16, 16), (16, 16))
+            img_moving = pygame.transform.scale(img_moving, (16 * 5, 16 * 5))
+            self.moving_sprt.append(img_moving)
 
         self.index = 0
         self.image = self.idle[self.index]
@@ -32,6 +39,9 @@ class Player(pygame.sprite.Sprite):
     def attack(self):
         self.is_attack = True
 
+    def moving(self):
+        self.is_moving = True
+
     def update(self):
         # Update da lista para ficar continuadamente em idle
         if self.is_attack:
@@ -39,6 +49,12 @@ class Player(pygame.sprite.Sprite):
                 self.index = 0
                 self.is_attack = False
             self.image = self.attack_sprt[int(self.index)]
+            self.index += 0.1
+
+        elif self.is_moving:
+            if self.index > 4:
+                self.index = 0
+            self.image = self.moving_sprt[int(self.index)]
             self.index += 0.1
 
         else:
