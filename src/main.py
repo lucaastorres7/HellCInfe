@@ -6,8 +6,7 @@ from characters.player import Player
 from characters.static_objects import StaticObject
 from functions.collision import collision
 from functions.move import move_player
-from settings import (CLOCK, PLAYER_SPRITESHEET, ROCK_IMAGE, SCREEN_HEIGHT,
-                      SCREEN_WIDTH)
+from settings import CLOCK, ROCK_IMAGE, SCREEN_HEIGHT, SCREEN_WIDTH
 
 pygame.init()
 
@@ -30,6 +29,10 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                character.attack()
 
         move_player(event, character)
 
