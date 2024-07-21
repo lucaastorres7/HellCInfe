@@ -1,24 +1,32 @@
-from settings import SCREEN_WIDTH, SCREEN_HEIGHT, PLAYER_IMAGE, ROCK_IMAGE
+import sys
+
+import pygame
+
+from characters.player import Player
 from characters.static_objects import StaticObject
 from functions.collision import collision
 from functions.move import move_player
-from characters.player import Player
-import pygame
-import sys
+from settings import (CLOCK, PLAYER_SPRITESHEET, ROCK_IMAGE, SCREEN_HEIGHT,
+                      SCREEN_WIDTH)
 
 pygame.init()
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption('HellCInfe')
 
-character_img = pygame.image.load(PLAYER_IMAGE)
+# Junta e adiciona os sprites ao player
+all_sprites = pygame.sprite.Group()
+character = Player(0, 300)
+all_sprites.add(character)
+
 rock_img = pygame.image.load(ROCK_IMAGE)
 
-character = Player(character_img, 0, 300)
 rock = StaticObject(rock_img, 250, 400)
 
 running = True
 while running:
+    CLOCK.tick(60)
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
