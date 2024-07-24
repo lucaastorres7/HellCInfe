@@ -1,4 +1,5 @@
 import pygame as pg
+from characters.drop import Drop
 import time
 
 
@@ -48,3 +49,6 @@ class Enemy:
 
     def is_dead(self):
         return self.health <= 0
+
+    def drop(self, drop_img):
+        return Drop(drop_img, self.rect.x, self.rect.y)

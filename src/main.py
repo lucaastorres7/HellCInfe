@@ -22,7 +22,12 @@ all_sprites.add(character)
 rock_img = pygame.image.load(ROCK_IMAGE)
 
 rock = StaticObject(rock_img, 250, 400)
-enemy1 = Enemy(rock_img, 500, 500, 100)
+
+enemies = [
+    Enemy(rock_img, 500, 300, 20),
+]
+
+drops = []
 
 running = True
 while running:
@@ -39,21 +44,33 @@ while running:
         move_player(event, character)
 
     character.update()
+    for enemy in enemies:
+        enemy.update(character)
 
-    if character.is_attack and character.rect.colliderect(enemy1.rect):
-        print("Enemy hit!")
-        enemy1.take_damage(10)
-        character.attacking = False  # Reset attacking state
+    for enemy in enemies:
+        if character.is_attack and character.rect.colliderect(enemy.rect):
+            print("Enemy hit!")
+            enemy.take_damage(10)
+            character.is_attack = False  # Reset attacking state
 
     screen.fill((0, 45, 0))
 
     character.draw(screen)
     rock.draw(screen)
 
-    if not enemy1.is_dead():
-        enemy1.draw(screen)
+    alive_enemies = []
+    for enemy in enemies:
+        if enemy.is_dead():
+            drops.append(enemy.drop(rock_img))
+        else:
+            alive_enemies.append(enemy)
+    enemies = alive_enemies
 
-    enemy1.update(character)
+    for enemy in enemies:
+        enemy.draw(screen)
+
+    for drop in drops:
+        drop.draw(screen)
 
     collision(character, rock)
 
