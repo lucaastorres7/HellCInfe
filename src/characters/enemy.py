@@ -1,10 +1,13 @@
 import pygame as pg
 from characters.drop import Drop
 import time
+from settings import BONES_IMAGE
+
+bones_img = pg.image.load(BONES_IMAGE)
 
 
 class Enemy:
-    def __init__(self, image, x, y, health):
+    def __init__(self, image, x, y, health, item_drop=bones_img):
         self.image = image
         self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)
@@ -13,6 +16,7 @@ class Enemy:
         self.attack_range = 50  # Adjust attack range as needed
         self.last_attack_time = 0  # Track last attack time
         self.attack_cooldown = 1.0  # Cooldown time in seconds
+        self.item_drop = item_drop
 
     def update(self, target):
         direction = pg.Vector2(target.rect.x - self.rect.x,
@@ -50,5 +54,5 @@ class Enemy:
     def is_dead(self):
         return self.health <= 0
 
-    def drop(self, drop_img):
-        return Drop(drop_img, self.rect.x, self.rect.y)
+    def drop(self):
+        return Drop(self.item_drop, self.rect.x, self.rect.y)

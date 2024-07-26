@@ -7,7 +7,7 @@ from characters.enemy import Enemy
 from characters.static_objects import StaticObject
 from functions.collision import collision
 from functions.move import move_player
-from settings import CLOCK, ROCK_IMAGE, SCREEN_HEIGHT, SCREEN_WIDTH
+from settings import CLOCK, ROCK_IMAGE, SCREEN_HEIGHT, SCREEN_WIDTH, BONES_IMAGE
 
 pygame.init()
 
@@ -20,6 +20,7 @@ character = Player(0, 300)
 all_sprites.add(character)
 
 rock_img = pygame.image.load(ROCK_IMAGE)
+bones_img = pygame.image.load(BONES_IMAGE)
 
 rock = StaticObject(rock_img, 250, 400)
 
@@ -61,7 +62,7 @@ while running:
     alive_enemies = []
     for enemy in enemies:
         if enemy.is_dead():
-            drops.append(enemy.drop(rock_img))
+            drops.append(enemy.drop())
         else:
             alive_enemies.append(enemy)
     enemies = alive_enemies

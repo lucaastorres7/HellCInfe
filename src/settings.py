@@ -7,5 +7,6 @@ HEALTH = 100
 PLAYER_SPRITESHEET = pygame.image.load(
     'assets/characters/Player_Knight_SpriteSheet.png')
 ROCK_IMAGE = 'assets/backgrounds/rock.png'
+BONES_IMAGE = 'assets/backgrounds/bones.png'
 
 CLOCK = pygame.time.Clock()

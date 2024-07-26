@@ -84,7 +84,7 @@ class Player(pygame.sprite.Sprite):
                 self.image = self.right_attack_sprt[int(self.index)]
             elif self.last_direction == "left":
                 self.image = self.left_attack_sprt[int(self.index)]
-            self.index += 0.1
+            self.index += 0.2
 
         elif self.is_moving:
             if self.direction.x == 1:
