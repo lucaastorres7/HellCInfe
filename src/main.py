@@ -3,10 +3,11 @@ import sys
 import pygame
 
 from characters.player import Player
+from characters.enemy import Enemy
 from characters.static_objects import StaticObject
 from functions.collision import collision
 from functions.move import move_player
-from settings import CLOCK, ROCK_IMAGE, SCREEN_HEIGHT, SCREEN_WIDTH
+from settings import CLOCK, ROCK_IMAGE, SCREEN_HEIGHT, SCREEN_WIDTH, BONES_IMAGE
 
 pygame.init()
 
@@ -19,8 +20,15 @@ character = Player(0, 300)
 all_sprites.add(character)
 
 rock_img = pygame.image.load(ROCK_IMAGE)
+bones_img = pygame.image.load(BONES_IMAGE)
 
 rock = StaticObject(rock_img, 250, 400)
+
+enemies = [
+    Enemy(rock_img, 500, 300, 20),
+]
+
+drops = []
 
 running = True
 while running:
@@ -37,13 +45,39 @@ while running:
         move_player(event, character)
 
     character.update()
+    for enemy in enemies:
+        enemy.update(character)
+
+    for enemy in enemies:
+        if character.is_attack and character.rect.colliderect(enemy.rect):
+            print("Enemy hit!")
+            enemy.take_damage(10)
+            character.is_attack = False  # Reset attacking state
 
     screen.fill((0, 45, 0))
 
     character.draw(screen)
     rock.draw(screen)
 
+    alive_enemies = []
+    for enemy in enemies:
+        if enemy.is_dead():
+            drops.append(enemy.drop())
+        else:
+            alive_enemies.append(enemy)
+    enemies = alive_enemies
+
+    for enemy in enemies:
+        enemy.draw(screen)
+
+    for drop in drops:
+        drop.draw(screen)
+
     collision(character, rock)
+
+    if character.is_dead():
+        print("Player is dead!")
+        running = False
 
     pygame.display.flip()
 

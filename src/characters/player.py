@@ -1,47 +1,61 @@
 import pygame
 
-from settings import PLAYER_SPRITESHEET, SCREEN_HEIGHT, SCREEN_WIDTH
+from settings import PLAYER_SPRITESHEET, SCREEN_HEIGHT, SCREEN_WIDTH, HEALTH
 
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
 
+        self.health = HEALTH
+
         self.idle_right = []
         for i in range(2):
-            img_idle_right = PLAYER_SPRITESHEET.subsurface((i * 16, 0), (16, 16))
-            img_idle_right = pygame.transform.scale(img_idle_right, (16 * 5, 16 * 5))
+            img_idle_right = PLAYER_SPRITESHEET.subsurface(
+                (i * 16, 0), (16, 16))
+            img_idle_right = pygame.transform.scale(
+                img_idle_right, (16 * 5, 16 * 5))
             self.idle_right.append(img_idle_right)
-        
+
         self.idle_left = []
         for i in range(2):
-            img_idle_left = PLAYER_SPRITESHEET.subsurface((i * 16, 16), (16, 16))
-            img_idle_left = pygame.transform.scale(img_idle_left, (16 * 5, 16 * 5))
+            img_idle_left = PLAYER_SPRITESHEET.subsurface(
+                (i * 16, 16), (16, 16))
+            img_idle_left = pygame.transform.scale(
+                img_idle_left, (16 * 5, 16 * 5))
             self.idle_left.append(img_idle_left)
 
         self.right_attack_sprt = []
         self.is_attack = False
         for i in range(5):
-            img_right_atk = PLAYER_SPRITESHEET.subsurface((i * 16, 64), (16, 16))
-            img_right_atk = pygame.transform.scale(img_right_atk, (16 * 5, 16 * 5))
+            img_right_atk = PLAYER_SPRITESHEET.subsurface(
+                (i * 16, 64), (16, 16))
+            img_right_atk = pygame.transform.scale(
+                img_right_atk, (16 * 5, 16 * 5))
             self.right_attack_sprt.append(img_right_atk)
-        
+
         self.left_attack_sprt = []
         for i in range(5):
-            img_left_atk = PLAYER_SPRITESHEET.subsurface((i * 16, 80), (16, 16))
-            img_left_atk = pygame.transform.scale(img_left_atk, (16 * 5, 16 * 5))
+            img_left_atk = PLAYER_SPRITESHEET.subsurface(
+                (i * 16, 80), (16, 16))
+            img_left_atk = pygame.transform.scale(
+                img_left_atk, (16 * 5, 16 * 5))
             self.left_attack_sprt.append(img_left_atk)
 
         self.moving_right_sprt = []
         for i in range(4):
-            img_moving_right = PLAYER_SPRITESHEET.subsurface((i * 16, 32), (16, 16))
-            img_moving_right = pygame.transform.scale(img_moving_right, (16 * 5, 16 * 5))
+            img_moving_right = PLAYER_SPRITESHEET.subsurface(
+                (i * 16, 32), (16, 16))
+            img_moving_right = pygame.transform.scale(
+                img_moving_right, (16 * 5, 16 * 5))
             self.moving_right_sprt.append(img_moving_right)
 
-        self.moving_left_sprt =[]
+        self.moving_left_sprt = []
         for i in range(4):
-            img_moving_left = PLAYER_SPRITESHEET.subsurface((i * 16, 48), (16, 16))
-            img_moving_left = pygame.transform.scale(img_moving_left, (16 * 5, 16 * 5))
+            img_moving_left = PLAYER_SPRITESHEET.subsurface(
+                (i * 16, 48), (16, 16))
+            img_moving_left = pygame.transform.scale(
+                img_moving_left, (16 * 5, 16 * 5))
             self.moving_left_sprt.append(img_moving_left)
 
         self.index = 0
@@ -52,7 +66,7 @@ class Player(pygame.sprite.Sprite):
         self.speed = 4
         self.direction = pygame.Vector2(0, 0)
         self.is_moving = False
-        self.last_direction = "right" # Default direction
+        self.last_direction = "right"  # Default direction
 
     def attack(self):
         self.is_attack = True
@@ -70,7 +84,7 @@ class Player(pygame.sprite.Sprite):
                 self.image = self.right_attack_sprt[int(self.index)]
             elif self.last_direction == "left":
                 self.image = self.left_attack_sprt[int(self.index)]
-            self.index += 0.1
+            self.index += 0.2
 
         elif self.is_moving:
             if self.direction.x == 1:
@@ -122,3 +136,13 @@ class Player(pygame.sprite.Sprite):
 
     def draw(self, surface):
         surface.blit(self.image, self.rect.topleft)
+
+    def take_damage(self, amount):
+        self.health -= amount
+        if self.health <= 0:
+            self.health = 0
+
+        print(f"Player: {self.health}/{HEALTH} HP")
+
+    def is_dead(self):
+        return self.health <= 0
