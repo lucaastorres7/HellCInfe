@@ -2,7 +2,6 @@ import pygame
 
 from settings import PLAYER_SPRITESHEET, SCREEN_HEIGHT, SCREEN_WIDTH, HEALTH
 
-
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
