@@ -1,12 +1,14 @@
 import pygame
 
-from settings import PLAYER_SPRITESHEET, SCREEN_HEIGHT, SCREEN_WIDTH, HEALTH
+from settings import PLAYER_SPRITESHEET, SCREEN_HEIGHT, SCREEN_WIDTH, HEALTH, RED, GREEN
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
 
-        self.health = HEALTH
+        self.current_health = HEALTH
+        self.max_health = HEALTH
 
         self.idle_right = []
         for i in range(2):
@@ -135,13 +137,30 @@ class Player(pygame.sprite.Sprite):
 
     def draw(self, surface):
         surface.blit(self.image, self.rect.topleft)
+        self.render_health_bar(surface)
 
     def take_damage(self, amount):
-        self.health -= amount
-        if self.health <= 0:
-            self.health = 0
-
-        print(f"Player: {self.health}/{HEALTH} HP")
+        self.current_health -= amount
+        if self.current_health <= 0:
+            self.current_health = 0
 
     def is_dead(self):
-        return self.health <= 0
+        return self.current_health <= 0
+
+    def render_health_bar(self, surface):
+        # Calculate health bar dimensions
+        health_bar_width = self.rect.width
+        health_bar_height = 10
+        health_bar_x = self.rect.x
+        health_bar_y = self.rect.y - health_bar_height - 2
+
+        # Calculate health ratio
+        health_ratio = self.current_health / self.max_health
+
+        # Draw health bar background
+        pygame.draw.rect(surface, RED, (health_bar_x,
+                         health_bar_y, health_bar_width, health_bar_height))
+
+        # Draw current health
+        pygame.draw.rect(surface, GREEN, (health_bar_x, health_bar_y,
+                         health_bar_width * health_ratio, health_bar_height))
