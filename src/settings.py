@@ -12,3 +12,6 @@ MOEDA_IMAGE = 'assets/backgrounds/moeda.png'
 POCAO_IMAGE = 'assets/backgrounds/pocao.png'
 ESCUDO_IMAGE = 'assets/backgrounds/escudo.png'
 CLOCK = pygame.time.Clock()
+
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)

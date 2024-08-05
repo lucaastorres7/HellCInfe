@@ -72,7 +72,7 @@ while running:
             enemy.take_damage(10)
             character.is_attack = False  # Reset attacking state
 
-    screen.fill((0, 45, 0))
+    screen.fill((0, 12, 0))
 
     character.draw(screen)
     rock.draw(screen)
