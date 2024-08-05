@@ -72,6 +72,11 @@ class Player(pygame.sprite.Sprite):
     def attack(self):
         self.is_attack = True
 
+    def heal(self, amount):
+        self.current_health += amount
+        if self.current_health > self.max_health:
+            self.current_health = self.max_health
+
     def moving(self):
         self.is_moving = True
 
@@ -148,19 +153,15 @@ class Player(pygame.sprite.Sprite):
         return self.current_health <= 0
 
     def render_health_bar(self, surface):
-        # Calculate health bar dimensions
         health_bar_width = self.rect.width
         health_bar_height = 10
         health_bar_x = self.rect.x
         health_bar_y = self.rect.y - health_bar_height - 2
 
-        # Calculate health ratio
         health_ratio = self.current_health / self.max_health
 
-        # Draw health bar background
         pygame.draw.rect(surface, RED, (health_bar_x,
                          health_bar_y, health_bar_width, health_bar_height))
 
-        # Draw current health
         pygame.draw.rect(surface, GREEN, (health_bar_x, health_bar_y,
                          health_bar_width * health_ratio, health_bar_height))
