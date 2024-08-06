@@ -8,7 +8,7 @@ from characters.enemy import Enemy
 from characters.static_objects import StaticObject
 from functions.collision import collision
 from functions.move import move_player
-from settings import CLOCK, ROCK_IMAGE, SCREEN_HEIGHT, SCREEN_WIDTH, BONES_IMAGE, MOEDA_IMAGE, POCAO_IMAGE, ESCUDO_IMAGE
+from settings import CLOCK, ROCK_IMAGE, SCREEN_HEIGHT, SCREEN_WIDTH, BONES_IMAGE, MOEDA_IMAGE, POCAO_IMAGE, ESCUDO_IMAGE, ENEMY_IMAGE
 
 pygame.init()
 
@@ -23,6 +23,7 @@ all_sprites = pygame.sprite.Group()
 character = Player(0, 300)
 all_sprites.add(character)
 
+enemy_img = pygame.image.load(ENEMY_IMAGE)
 rock_img = pygame.image.load(ROCK_IMAGE)
 bones_img = pygame.image.load(BONES_IMAGE)
 moeda_img = pygame.image.load(MOEDA_IMAGE)
@@ -30,6 +31,7 @@ pocao_img = pygame.image.load(POCAO_IMAGE)
 escudo_img = pygame.image.load(ESCUDO_IMAGE)
 
 rock = StaticObject(rock_img, 250, 400)
+
 x_moeda = randint(80, 950)
 y_moeda = randint(80, 750)
 moeda = StaticObject(moeda_img, x_moeda, y_moeda)
@@ -43,7 +45,7 @@ y_escudo = randint(80, 750)
 escudo = StaticObject(escudo_img, x_escudo, y_escudo)
 
 enemies = [
-    Enemy(rock_img, 500, 300, 20),
+    Enemy(enemy_img, 500, 300, 20),
 ]
 
 drops = []
@@ -102,7 +104,6 @@ while running:
         drop.draw(screen)
 
     collision(character, rock)
-
     if character.rect.colliderect(moeda):
         x_moeda = randint(80, 950)
         y_moeda = randint(80, 750)
