@@ -1,6 +1,6 @@
 import pygame
 
-from settings import PLAYER_SPRITESHEET, SCREEN_HEIGHT, SCREEN_WIDTH, HEALTH, RED, GREEN
+from settings import *
 
 
 class Player(pygame.sprite.Sprite):
@@ -68,6 +68,9 @@ class Player(pygame.sprite.Sprite):
         self.direction = pygame.Vector2(0, 0)
         self.is_moving = False
         self.last_direction = "right"  # Default direction
+        self.is_shield = False
+        self.invulnerability_time = 3
+        self.invulnerability_start = 0
 
     def attack(self):
         self.is_attack = True
@@ -76,6 +79,11 @@ class Player(pygame.sprite.Sprite):
         self.current_health += amount
         if self.current_health > self.max_health:
             self.current_health = self.max_health
+
+    def shield(self):
+        self.is_shield = True
+        self.invulnerability_start = time.time()
+        print("imortal")
 
     def moving(self):
         self.is_moving = True
@@ -145,9 +153,12 @@ class Player(pygame.sprite.Sprite):
         self.render_health_bar(surface)
 
     def take_damage(self, amount):
-        self.current_health -= amount
-        if self.current_health <= 0:
-            self.current_health = 0
+        if self.is_shield:
+            pass
+        else:
+            self.current_health -= amount
+            if self.current_health <= 0:
+                self.current_health = 0
 
     def is_dead(self):
         return self.current_health <= 0

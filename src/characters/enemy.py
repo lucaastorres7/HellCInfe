@@ -1,6 +1,8 @@
-import pygame as pg
-from characters.drop import Drop
 import time
+
+import pygame as pg
+
+from characters.drop import Drop
 from settings import BONES_IMAGE
 
 bones_img = pg.image.load(BONES_IMAGE)
