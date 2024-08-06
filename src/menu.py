@@ -1,6 +1,5 @@
 import pygame
 import button
-from main import start_game
 
 def show_menu(screen):
     game_mute = False
@@ -9,7 +8,7 @@ def show_menu(screen):
     pygame.mixer.music.load("audios/highoctane.mp3")
     pygame.mixer.music.play(-1)
 
-    background_img = pygame.image.load("assets/backgrounds/cave.png")
+    background_img = pygame.image.load("assets/backgrounds/castelo.jpg")
     hellcinfe_img = pygame.image.load("assets/backgrounds/hellcinfe_logo.png")
 
     som_ativado = pygame.image.load("assets/assetsmenu/somativado.png")
@@ -28,13 +27,13 @@ def show_menu(screen):
 
         if menu_state == "main":
             screen.blit(background_img, (0, 0))
-            screen.blit(hellcinfe_img, (395, 80))
+            screen.blit(hellcinfe_img, (340, 150))
             
             if quit_button.draw(screen):
                 run = False
 
             if play_button.draw(screen):
-                start_game(screen)
+                return "play"
 
             if sound_button.draw(screen):
                 if not game_mute:
@@ -55,15 +54,10 @@ def show_menu(screen):
     pygame.mixer.music.stop()
     pygame.quit()
 
-def main():
-    pygame.init()
+pygame.init()
 
-    SCREEN_WIDTH = 1000
-    SCREEN_HEIGHT = 800
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    pygame.display.set_caption("Main Menu")
-    pygame.mixer.init()
-    show_menu(screen)
-
-if __name__ == "__main__":
-    main()
+SCREEN_WIDTH = 1000
+SCREEN_HEIGHT = 800
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Main Menu")
+pygame.mixer.init()

@@ -9,8 +9,14 @@ from characters.static_objects import StaticObject
 from functions.collision import collision
 from functions.move import move_player
 from settings import CLOCK, ROCK_IMAGE, SCREEN_HEIGHT, SCREEN_WIDTH, BONES_IMAGE, MOEDA_IMAGE, POCAO_IMAGE, ESCUDO_IMAGE
+from menu import show_menu
 
-def start_game(screen):
+pygame.init()
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption('HellCInfe')
+choice_menu = show_menu(screen)
+
+if choice_menu == "play":
     # Quantidade de moedas
     fonte = pygame.font.SysFont('arial', 40, True, True)
     quant_moedas, quant_pocao, quant_escudo = 0, 0, 0
@@ -128,12 +134,3 @@ def start_game(screen):
 
     pygame.quit()
     sys.exit()
-
-def main():
-    pygame.init()
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    pygame.display.set_caption('HellCInfe')
-    start_game(screen)
-
-if __name__ == "__main__":
-    main()
