@@ -26,8 +26,11 @@ all_sprites.add(character)
 rock_img = pygame.image.load(ROCK_IMAGE)
 bones_img = pygame.image.load(BONES_IMAGE)
 moeda_img = pygame.image.load(MOEDA_IMAGE)
+coin_spawn = False
 pocao_img = pygame.image.load(POCAO_IMAGE)
+potion_spawn = False
 escudo_img = pygame.image.load(ESCUDO_IMAGE)
+shield_spawn = False
 
 rock = StaticObject(rock_img, 250, 400)
 x_moeda = randint(80, 950)
@@ -104,25 +107,54 @@ while running:
     collision(character, rock)
 
     if character.rect.colliderect(moeda):
-        x_moeda = randint(80, 950)
-        y_moeda = randint(80, 750)
-        moeda = StaticObject(moeda_img, x_moeda, y_moeda)
         quant_moedas = quant_moedas + 1
+        x_moeda = -100
+        y_moeda = -100
+        moeda = StaticObject(moeda_img, x_moeda, y_moeda)
+        coin_spawn_time = time.time()
+        coin_spawn = True
+
+    if coin_spawn:
+        coin_elapsed_time = time.time() - coin_spawn_time
+        if coin_elapsed_time > 5:
+            x_moeda = randint(80, 950)
+            y_moeda = randint(80, 750)
+            moeda = StaticObject(moeda_img, x_moeda, y_moeda)
+            coin_spawn = False
 
     if character.rect.colliderect(pocao):
-        x_pocao = randint(80, 950)
-        y_pocao = randint(80, 750)
-        pocao = StaticObject(pocao_img, x_pocao, y_pocao)
         quant_pocao = quant_pocao + 1
-
         character.heal(10)
+        x_pocao = -100
+        y_pocao = -100
+        pocao = StaticObject(pocao_img, x_pocao, y_pocao)
+        potion_spawn_time = time.time()
+        potion_spawn = True
+    
+    if potion_spawn:
+        potion_elapsed_time = time.time() - potion_spawn_time
+        if potion_elapsed_time > 5:
+            x_pocao = randint(80, 950)
+            y_pocao = randint(80, 750)
+            pocao = StaticObject(pocao_img, x_pocao, y_pocao)
+            potion_spawn = False
 
     if character.rect.colliderect(escudo):
-        x_escudo = randint(80, 950)
-        y_escudo = randint(80, 750)
-        escudo = StaticObject(escudo_img, x_escudo, y_escudo)
-        quant_escudo = quant_escudo + 1
         character.shield()
+        quant_escudo = quant_escudo + 1
+        x_escudo = -100
+        y_escudo = -100
+        escudo = StaticObject(escudo_img, x_escudo, y_escudo)
+        shield_spawn_time = time.time()
+        shield_spawn = True
+
+    if shield_spawn:
+        shield_elapsed_time = time.time() - shield_spawn_time
+        if shield_elapsed_time > 10:
+            x_escudo = randint(80, 950)
+            y_escudo = randint(80, 750)
+            escudo = StaticObject(escudo_img, x_escudo, y_escudo)
+            shield_spawn = False
 
     if character.is_shield:
         character.elapsed_time = time.time() - character.invulnerability_start
@@ -134,6 +166,7 @@ while running:
     if character.is_dead():
         print("Player is dead!")
         running = False
+
     screen.blit(text_format, (750, 10))
     screen.blit(text_format1, (750, 50))
     screen.blit(text_format2, (750, 90))

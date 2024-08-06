@@ -85,7 +85,6 @@ class Player(pygame.sprite.Sprite):
         self.invulnerability_start = time.time()
         print("imortal")
 
-
     def moving(self):
         self.is_moving = True
 
