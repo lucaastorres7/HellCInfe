@@ -1,14 +1,14 @@
 import sys
+from random import randint
 
 import pygame
 
-from random import randint
-from characters.player import Player
 from characters.enemy import Enemy
+from characters.player import Player
 from characters.static_objects import StaticObject
 from functions.collision import collision
 from functions.move import move_player
-from settings import CLOCK, ROCK_IMAGE, SCREEN_HEIGHT, SCREEN_WIDTH, BONES_IMAGE, MOEDA_IMAGE, POCAO_IMAGE, ESCUDO_IMAGE
+from settings import *
 
 pygame.init()
 
@@ -115,11 +115,21 @@ while running:
         pocao = StaticObject(pocao_img, x_pocao, y_pocao)
         quant_pocao = quant_pocao + 1
 
+        character.heal(10)
+
     if character.rect.colliderect(escudo):
         x_escudo = randint(80, 950)
         y_escudo = randint(80, 750)
         escudo = StaticObject(escudo_img, x_escudo, y_escudo)
         quant_escudo = quant_escudo + 1
+        character.shield()
+
+    if character.is_shield:
+        character.elapsed_time = time.time() - character.invulnerability_start
+        print(f"{character.elapsed_time}")
+        if character.elapsed_time > character.invulnerability_time:
+            print("its over")
+            character.is_shield = False
 
     if character.is_dead():
         print("Player is dead!")
