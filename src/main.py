@@ -10,6 +10,7 @@ from functions.collision import collision
 from functions.move import move_player
 from settings import *
 from menu import show_menu
+from defeat import show_defeat
 
 pygame.init()
 
@@ -172,8 +173,9 @@ while running:
             character.is_shield = False
 
     if character.is_dead():
-        print("Player is dead!")
-        running = False
+        show_defeat()
+        
+        #running = False
 
     screen.blit(text_format, (750, 10))
     screen.blit(text_format1, (750, 50))
