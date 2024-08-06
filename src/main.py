@@ -9,11 +9,18 @@ from characters.static_objects import StaticObject
 from functions.collision import collision
 from functions.move import move_player
 from settings import *
+from menu import show_menu
 
 pygame.init()
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption('HellCInfe')
+choice_menu = show_menu(screen)
+
+if choice_menu == "quit":
+    pygame.quit()
+    sys.exit()
+
 # Quantidade de moedas
 fonte = pygame.font.SysFont('arial', 40, True, True)
 quant_moedas, quant_pocao, quant_escudo = 0, 0, 0
