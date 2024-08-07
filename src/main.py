@@ -25,6 +25,7 @@ if choice_menu == "quit":
 # Quantidade de moedas
 fonte = pygame.font.SysFont('arial', 40, True, True)
 quant_moedas, quant_pocao, quant_escudo = 0, 0, 0
+quant_deads = 0
 
 # Junta e adiciona os sprites ao player
 all_sprites = pygame.sprite.Group()
@@ -104,6 +105,9 @@ while running:
     for enemy in enemies:
         if enemy.is_dead():
             drops.append(enemy.drop())
+            x_enemy = randint(50, 950)
+            y_enemy = randint(50, 750)
+            enemies.append(Enemy(enemy_img, y_enemy, 300, 20),) 
         else:
             alive_enemies.append(enemy)
     enemies = alive_enemies
