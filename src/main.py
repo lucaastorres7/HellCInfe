@@ -1,22 +1,28 @@
-import sys
-from random import randint
-
-import pygame
-
-from characters.enemy import Enemy
-from characters.player import Player
 from characters.static_objects import StaticObject
 from functions.collision import collision
 from functions.move import move_player
+from characters.player import Player
+from characters.enemy import Enemy
+from ui.defeat import show_defeat
+from ui.menu import show_menu
+from ui.win import show_win
+from random import randint
 from settings import *
+import pygame
+import sys
 
 pygame.init()
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption('HellCInfe')
+choice_menu = show_menu(screen)
+
+if choice_menu == "quit":
+    pygame.quit()
+    sys.exit()
+
 # Quantidade de moedas
 fonte = pygame.font.SysFont('arial', 40, True, True)
-quant_moedas, quant_pocao, quant_escudo = 0, 0, 0
 quant_deads = 0
 
 # Junta e adiciona os sprites ao player
@@ -86,9 +92,9 @@ while running:
     pocao.draw(screen)
     escudo.draw(screen)
 
-    mensage = f'Moedas: {quant_moedas}'
-    mensage1 = f'Poção: {quant_pocao}'
-    mensage2 = f'Escudo: {quant_escudo}'
+    mensage = f'Moedas: {character.coins}'
+    mensage1 = f'Poção: {character.potions}'
+    mensage2 = f'Escudo: {character.shields}'
     text_format = fonte.render(mensage, False, (255, 255, 255))
     text_format1 = fonte.render(mensage1, False, (255, 255, 255))
     text_format2 = fonte.render(mensage2, False, (255, 255, 255))
@@ -99,7 +105,7 @@ while running:
             drops.append(enemy.drop())
             x_enemy = randint(50, 950)
             y_enemy = randint(50, 750)
-            enemies.append(Enemy(enemy_img, y_enemy, 300, 20),) 
+            enemies.append(Enemy(enemy_img, y_enemy, 300, 20),)
         else:
             alive_enemies.append(enemy)
     enemies = alive_enemies
@@ -112,7 +118,7 @@ while running:
 
     collision(character, rock)
     if character.rect.colliderect(moeda):
-        quant_moedas = quant_moedas + 1
+        character.coins = character.coins + 1
         x_moeda = -100
         y_moeda = -100
         moeda = StaticObject(moeda_img, x_moeda, y_moeda)
@@ -128,14 +134,14 @@ while running:
             coin_spawn = False
 
     if character.rect.colliderect(pocao):
-        quant_pocao = quant_pocao + 1
+        character.potions = character.potions + 1
         character.heal(10)
         x_pocao = -100
         y_pocao = -100
         pocao = StaticObject(pocao_img, x_pocao, y_pocao)
         potion_spawn_time = time.time()
         potion_spawn = True
-    
+
     if potion_spawn:
         potion_elapsed_time = time.time() - potion_spawn_time
         if potion_elapsed_time > 5:
@@ -146,7 +152,7 @@ while running:
 
     if character.rect.colliderect(escudo):
         character.shield()
-        quant_escudo = quant_escudo + 1
+        character.shields = character.shields + 1
         x_escudo = -100
         y_escudo = -100
         escudo = StaticObject(escudo_img, x_escudo, y_escudo)
@@ -163,14 +169,15 @@ while running:
 
     if character.is_shield:
         character.elapsed_time = time.time() - character.invulnerability_start
-        print(f"{character.elapsed_time}")
         if character.elapsed_time > character.invulnerability_time:
             print("its over")
             character.is_shield = False
 
     if character.is_dead():
-        print("Player is dead!")
-        running = False
+        show_defeat(character=character)
+
+    if character.won():
+        show_win(character=character)
 
     screen.blit(text_format, (750, 10))
     screen.blit(text_format1, (750, 50))
