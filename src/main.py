@@ -1,3 +1,11 @@
+import sys
+from random import randint
+
+import pygame
+
+from characters.enemy import Enemy
+from characters.player import Player
+from characters.boss import Boss, move_sprites_paths, attack_sprites_paths
 from characters.static_objects import StaticObject
 from functions.collision import collision
 from functions.move import move_player
@@ -23,12 +31,17 @@ if choice_menu == "quit":
 
 # Quantidade de moedas
 fonte = pygame.font.SysFont('arial', 40, True, True)
-quant_deads = 0
+quant_moedas, quant_pocao, quant_escudo = 0, 0, 0
+quant_deads = 0 
 
 # Junta e adiciona os sprites ao player
 all_sprites = pygame.sprite.Group()
 character = Player(0, 300)
 all_sprites.add(character)
+
+# Junta e adiciona os sprites ao Boss
+boss = Boss(32, 32, move_sprites_paths, attack_sprites_paths, 100) 
+all_sprites.add(boss) 
 
 enemy_img = pygame.image.load(ENEMY_IMAGE)
 rock_img = pygame.image.load(ROCK_IMAGE)
@@ -60,6 +73,8 @@ enemies = [
 
 drops = []
 
+contador = 0
+verification = 1
 running = True
 while running:
     CLOCK.tick(60)
@@ -77,18 +92,43 @@ while running:
     character.update()
     for enemy in enemies:
         enemy.update(character)
-
+        
+ 
     for enemy in enemies:
         if character.is_attack and character.rect.colliderect(enemy.rect):
             print("Enemy hit!")
             enemy.take_damage(10)
             character.is_attack = False  # Reset attacking state
+            
+    if character.is_attack and character.rect.colliderect(boss.rect) and boss.life_Boss > 0:
+        print("Boss hit!")
+        boss.damage_taken(10)  # Aplica dano ao boss
+        character.is_attack = False  
+ 
+    if boss.life_Boss > 0 and contador > 3:
+        boss.update(character)  
+    elif boss.life_Boss <= 0:
+         # Se o boss foi derrotado  
+          for drop_item in range(verification):
+            verification -= 1
+            if boss.life_Boss <= 0:
+                drops.append(boss.drop()) 
+            boss.defeat()
+            if boss in all_sprites:
+                all_sprites.remove(boss)  # Remover o boss do grupo de sprites
+            boss_defeated = True
+
 
     screen.fill((0, 12, 0))
-
+    
+    # O boss só vai ser desenhado após o player derrotar um número expecífico de inimigos
+    if contador > 3 and boss.life_Boss > 0:
+        boss.draw(screen)
+        all_sprites.draw(screen)
+    
     character.draw(screen)
     rock.draw(screen)
-    moeda.draw(screen)
+    moeda.draw(screen) 
     pocao.draw(screen)
     escudo.draw(screen)
 
@@ -106,6 +146,7 @@ while running:
             x_enemy = randint(50, 950)
             y_enemy = randint(50, 750)
             enemies.append(Enemy(enemy_img, y_enemy, 300, 20),)
+            contador += 1
         else:
             alive_enemies.append(enemy)
     enemies = alive_enemies
@@ -185,4 +226,4 @@ while running:
     pygame.display.flip()
 
 pygame.quit()
-sys.exit()
+sys.exit() 
