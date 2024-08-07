@@ -19,6 +19,11 @@ derrota_img = pygame.image.load(
 derrota_button_img = pygame.image.load("assets/assetsmenu/restartbutton.png")
 quit_derrota_img = pygame.image.load("assets/assetsmenu/quitderrotabutton.png")
 
+WIN_SCREEN = pygame.transform.scale(pygame.image.load(
+    "assets/backgrounds/win_screen.jpg"), (SCREEN_WIDTH, SCREEN_HEIGHT))
+DUNGEON_SCREEN = pygame.transform.scale(pygame.image.load(
+    "assets/backgrounds/dungeon_screen.jpg"), (SCREEN_WIDTH, SCREEN_HEIGHT))
+
 CLOCK = pygame.time.Clock()
 
 RED = (255, 0, 0)

@@ -1,5 +1,4 @@
 from characters.static_objects import StaticObject
-from functions.collision import collision
 from functions.move import move_player
 from characters.player import Player
 from characters.enemy import Enemy
@@ -63,6 +62,8 @@ enemies = [
 
 drops = []
 
+stop = False
+defeat = False
 running = True
 while running:
     CLOCK.tick(60)
@@ -74,19 +75,20 @@ while running:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 character.attack()
-
         move_player(event, character)
 
-    character.update(obstacles)
-    for enemy in enemies:
-        enemy.update(character)
+    if not stop:
+        character.update(obstacles)
+
+        for enemy in enemies:
+            enemy.update(character)
 
     for enemy in enemies:
         if character.is_attack and character.rect.colliderect(enemy.rect):
             enemy.take_damage(10)
             character.is_attack = False  # Reset attacking state
 
-    screen.fill((0, 12, 0))
+    screen.blit(DUNGEON_SCREEN, (0, 0))
 
     character.draw(screen)
     coin.draw(screen)
@@ -94,11 +96,8 @@ while running:
     shield.draw(screen)
 
     mensage = f'Coins: {character.coins}'
-    mensage1 = f'Poção: {character.potions}'
-    mensage2 = f'Shield: {character.shields}'
     text_format = fonte.render(mensage, False, (255, 255, 255))
-    text_format1 = fonte.render(mensage1, False, (255, 255, 255))
-    text_format2 = fonte.render(mensage2, False, (255, 255, 255))
+
     alive_enemies = []
 
     for enemy in enemies:
@@ -176,14 +175,25 @@ while running:
             character.is_shield = False
 
     if character.is_dead():
-        show_defeat(character=character)
+        stop = True
+        defeat = True
 
     if character.won():
-        show_win(character=character)
+        stop = True
 
-    screen.blit(text_format, (750, 10))
-    screen.blit(text_format1, (750, 50))
-    screen.blit(text_format2, (750, 90))
+    if stop:
+        if defeat:
+            response = show_defeat()
+        else:
+            response = show_win()
+        if response == "restart":
+            character.reset()
+            defeat = False
+            stop = False
+
+    if not stop:
+        screen.blit(text_format, (750, 10))
+
     pygame.display.flip()
 
 pygame.quit()
