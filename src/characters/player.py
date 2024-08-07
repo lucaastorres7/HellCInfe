@@ -87,7 +87,6 @@ class Player(pygame.sprite.Sprite):
     def shield(self):
         self.is_shield = True
         self.invulnerability_start = time.time()
-        print("imortal")
 
     def moving(self):
         self.is_moving = True
@@ -166,6 +165,9 @@ class Player(pygame.sprite.Sprite):
 
     def is_dead(self):
         return self.current_health <= 0
+
+    def won(self):
+        return self.coins == 10
 
     def render_health_bar(self, surface):
         health_bar_width = self.rect.width

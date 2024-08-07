@@ -2,9 +2,10 @@ from characters.static_objects import StaticObject
 from functions.collision import collision
 from functions.move import move_player
 from characters.player import Player
-from ui.defeat import show_defeat
 from characters.enemy import Enemy
+from ui.defeat import show_defeat
 from ui.menu import show_menu
+from ui.win import show_win
 from random import randint
 from settings import *
 import pygame
@@ -174,6 +175,9 @@ while running:
 
     if character.is_dead():
         show_defeat(character=character)
+
+    if character.won():
+        show_win(character=character)
 
     screen.blit(text_format, (750, 10))
     screen.blit(text_format1, (750, 50))
