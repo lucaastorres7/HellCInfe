@@ -77,10 +77,10 @@ Organizamos nosso projeto em pastas. A pasta assets que contém os arquivos de i
 
 ## Capturas de Tela
 
-[Tela de Derrota](assets\screenshots\death.jpg)
-[Tela do Jogo](assets\screenshots\game.jpg)
-[Tela de Menu](assets\screenshots\menu.jpg)
-[Tela de Vitória](assets\screenshots\victory.jpg)
+<img src="assets\screenshots\death.jpg"/>
+<img src="assets\screenshots\game.jpg"/>
+<img src="assets\screenshots\menu.jpg"/>
+<img src="assets\screenshots\victory.jpg"/>
 
 ## Ferramentas, Bibliotecas e Frameworks
 
