@@ -5,11 +5,46 @@
 | [Lucas Torres](mailto:lrts@cin.ufpe.br)                                                                         | [Guilherme da Matta](mailto:gpms@cin.ufpe.br)                                                                          | [Carlos Alexandre](mailto:cassj@cin.ufpe.br)                                                                          | [Pedro Vinicius](mailto:pvcb2@cin.ufpe.br)                                                                             | [Thiago Fernandes](mailto:tfls@cin.ufpe.br)
 
 ## Como rodar o jogo?
+1. Instalar a biblioteca pygame no computador. Para isso, vá no terminal e digite
+```
+pip3 install pygame
+```
+2. Copie o link do repositório "https://github.com/lucaastorres7/HellCInfe"
+3. Após isso vá no terminal e use o seguinte comando para copiar o repositório em seu computador:
+```
+git clone https://github.com/lucaastorres7/HellCInfe
+```
+4. Para executar o programa, use esse comando no VSCode:
 ```
 python src/main.py
 ```
 
 ## Arquitetura e Organização do Código
+O código foi estruturado principalmente Orientado à Objetos.
+
+### Pastas e arquivos
+Organizamos nosso projeto em pastas. A pasta assets que contém os arquivos de imagem e de som utilizado no jogo e a pasta src que contém o código inteiro. Dentro dessas pastas, há outras pastas para deixar o código um pouco mais organizado. Além disso, o código está dividido em diversos arquivos, sendo os principais a main.py e settings.py
+
+### Codigo
+#### Classes
+- Player():
+> É a classe responsável por criar o personagem principal e realizar as principais funções do jogo. Como a movimentação, a colisão, a derrota e a vitória, a barra de vida, o ataque, o dano recebido e os sprites.
+- Enemy():
+> É a classe responsável por criar o inimigo e as funções relacionadas a ele. Como a sua movimentação, seu dano recebido e o ataque.
+- StaticObject():
+>  É a classe responsável por criar os objetos que não se movem na tela.
+- Drop():
+> É a classe responsável por criar um item no chão ao matar um inimigo.
+- Button():
+> É a classe responsável por criar o botão no menu e na tela de derrota e detectar o clique do mouse.
+
+#### Funções
+- def show_menu():
+> É a função que cria o menu na tela.
+- def show_defeat():
+> É a função que cria a tela de derrota na tela.
+- def show_win():
+> É a função que cria a tela de vitória na tela.
 
 ## Controles:
 |    Jogador      |     Teclas    |
@@ -46,6 +81,13 @@ python src/main.py
 |  **Thiago Fernandes** | Implementou o boss e auxiliou no design |
 
 ## Conceitos e Aplicação
+Ao decorrer do código, usamos diversos conceitos que aprendemos durante as aulas. Sendo os principais utilizados os Laços de Repetições, as Estruturas Condicionais, Funções, Listas e também a Programação Orientada a Objetos.
+
+O uso dos laços de repetições é evidente no arquivo "main.py", já que nele o jogo roda dentro de um "While" e dentro desse while tem vários "for" loops utilizados para diversas finalidades. Como por exemplo, para verificar eventos que estão acontecendo com o jogador, para spawnar e verificar os inimigos. O for também é utilizado em conjunto com as listas para iterar nela para desenhar os sprites do personagem na tela de acordo com a ação que ele faz.
+
+As estruturas condicionais foram uma parte essencial do código, já que em quase todo o código elas foram utilizadas. Ela foi usada para o spawn de itens, para a movimentação do personagem, para detectar as colisões, para verificar o estado do personagem e escolher o sprite, para mudar o status do personagem, para fazer a verificação de vitória e derrota, entre outros usos.
+
+A utilização da Programação Orientada a Objetos tornou o código mais organizado e também foi essencial para o funcionamento do código, já que com o uso de seus métodos e atributos, o código acaba ficando mais organizado e conectado. As classes foram fundamentais para que pudessem ser criados os inimigos, os objetos estáticos e do jogador.
 
 ## Desafios/Erros/Experiência
 - O maior desafio do grupo foi a utilização do github, já que nunca haviamos utilizado ele antes. A nossa solução para esse problema foi assistir a vídeos no youtube sobre git e compartilhando o conhecimento entre nós.
