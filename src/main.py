@@ -1,16 +1,14 @@
-import sys
-from random import randint
-
-import pygame
-
-from characters.enemy import Enemy
-from characters.player import Player
 from characters.static_objects import StaticObject
 from functions.collision import collision
 from functions.move import move_player
+from characters.player import Player
+from ui.defeat import show_defeat
+from characters.enemy import Enemy
+from ui.menu import show_menu
+from random import randint
 from settings import *
-from menu import show_menu
-from defeat import show_defeat
+import pygame
+import sys
 
 pygame.init()
 
@@ -24,7 +22,6 @@ if choice_menu == "quit":
 
 # Quantidade de moedas
 fonte = pygame.font.SysFont('arial', 40, True, True)
-quant_moedas, quant_pocao, quant_escudo = 0, 0, 0
 quant_deads = 0
 
 # Junta e adiciona os sprites ao player
@@ -94,9 +91,9 @@ while running:
     pocao.draw(screen)
     escudo.draw(screen)
 
-    mensage = f'Moedas: {quant_moedas}'
-    mensage1 = f'Poção: {quant_pocao}'
-    mensage2 = f'Escudo: {quant_escudo}'
+    mensage = f'Moedas: {character.coins}'
+    mensage1 = f'Poção: {character.potions}'
+    mensage2 = f'Escudo: {character.shields}'
     text_format = fonte.render(mensage, False, (255, 255, 255))
     text_format1 = fonte.render(mensage1, False, (255, 255, 255))
     text_format2 = fonte.render(mensage2, False, (255, 255, 255))
@@ -120,7 +117,7 @@ while running:
 
     collision(character, rock)
     if character.rect.colliderect(moeda):
-        quant_moedas = quant_moedas + 1
+        character.coins = character.coins + 1
         x_moeda = -100
         y_moeda = -100
         moeda = StaticObject(moeda_img, x_moeda, y_moeda)
@@ -136,7 +133,7 @@ while running:
             coin_spawn = False
 
     if character.rect.colliderect(pocao):
-        quant_pocao = quant_pocao + 1
+        character.potions = character.potions + 1
         character.heal(10)
         x_pocao = -100
         y_pocao = -100
@@ -154,7 +151,7 @@ while running:
 
     if character.rect.colliderect(escudo):
         character.shield()
-        quant_escudo = quant_escudo + 1
+        character.shields = character.shields + 1
         x_escudo = -100
         y_escudo = -100
         escudo = StaticObject(escudo_img, x_escudo, y_escudo)
@@ -171,7 +168,6 @@ while running:
 
     if character.is_shield:
         character.elapsed_time = time.time() - character.invulnerability_start
-        print(f"{character.elapsed_time}")
         if character.elapsed_time > character.invulnerability_time:
             print("its over")
             character.is_shield = False

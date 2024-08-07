@@ -1,5 +1,6 @@
+import ui.button as button
 import pygame
-import button
+
 
 def show_menu(screen):
     game_mute = False
@@ -14,8 +15,10 @@ def show_menu(screen):
     som_ativado = pygame.image.load("assets/assetsmenu/somativado.png")
     som_desativado = pygame.image.load("assets/assetsmenu/somdesativado.png")
 
-    play_img = pygame.image.load("assets/assetsmenu/playbutton.png").convert_alpha()
-    quit_img = pygame.image.load("assets/assetsmenu/quitbutton.png").convert_alpha()
+    play_img = pygame.image.load(
+        "assets/assetsmenu/playbutton.png").convert_alpha()
+    quit_img = pygame.image.load(
+        "assets/assetsmenu/quitbutton.png").convert_alpha()
 
     play_button = button.Button(430, 405, play_img, 1)
     quit_button = button.Button(430, 605, quit_img, 1)
@@ -28,7 +31,7 @@ def show_menu(screen):
         if menu_state == "main":
             screen.blit(background_img, (0, 0))
             screen.blit(hellcinfe_img, (340, 150))
-            
+
             if quit_button.draw(screen):
                 return "quit"
 
@@ -44,15 +47,16 @@ def show_menu(screen):
                     pygame.mixer.music.set_volume(1)
                     sound_button = button.Button(850, 600, som_ativado, 1)
                     game_mute = False
-        
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
 
         pygame.display.update()
-    
+
     pygame.mixer.music.stop()
     pygame.quit()
+
 
 pygame.init()
 

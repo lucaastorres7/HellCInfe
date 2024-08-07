@@ -10,6 +10,10 @@ class Player(pygame.sprite.Sprite):
         self.current_health = HEALTH
         self.max_health = HEALTH
 
+        self.coins = 0
+        self.potions = 0
+        self.shields = 0
+
         self.idle_right = []
         for i in range(2):
             img_idle_right = PLAYER_SPRITESHEET.subsurface(
@@ -188,3 +192,6 @@ class Player(pygame.sprite.Sprite):
         self.index = 0
         self.last_direction = "right"
         self.image = self.idle_right[self.index]
+        self.coins = 0
+        self.potions = 0
+        self.shields = 0

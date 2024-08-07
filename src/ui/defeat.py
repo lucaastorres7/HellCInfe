@@ -1,9 +1,9 @@
-from settings import *
-import button
-import sys
-from menu import show_menu
-import pygame
 from characters.player import Player
+from ui.menu import show_menu
+import ui.button as button
+from settings import *
+import pygame
+import sys
 
 fonte = pygame.font.SysFont('arial', 40, True, True)
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
