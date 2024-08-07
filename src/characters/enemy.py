@@ -14,10 +14,10 @@ class Enemy:
         self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)
         self.health = health
-        self.speed = 2  # Adjust the speed as needed
-        self.attack_range = 50  # Adjust attack range as needed
-        self.last_attack_time = 0  # Track last attack time
-        self.attack_cooldown = 1.0  # Cooldown time in seconds
+        self.speed = 2
+        self.attack_range = 50
+        self.last_attack_time = 0
+        self.attack_cooldown = 1.0
         self.item_drop = item_drop
 
     def update(self, target):
@@ -40,7 +40,6 @@ class Enemy:
         self.health -= amount
         if self.health <= 0:
             self.health = 0
-        print(f"Enemy health: {self.health}/100")
 
     def can_attack(self):
         current_time = time.time()
@@ -50,8 +49,7 @@ class Enemy:
         return False
 
     def attack(self, target):
-        print("Enemy attacks player!")
-        target.take_damage(10)  # Adjust the damage amount as needed
+        target.take_damage(10)
 
     def is_dead(self):
         return self.health <= 0

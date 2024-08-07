@@ -1,5 +1,4 @@
 from characters.static_objects import StaticObject
-from functions.collision import collision
 from functions.move import move_player
 from characters.player import Player
 from characters.enemy import Enemy
@@ -21,7 +20,7 @@ if choice_menu == "quit":
     pygame.quit()
     sys.exit()
 
-# Quantidade de moedas
+# Quantidade de coins
 fonte = pygame.font.SysFont('arial', 40, True, True)
 quant_deads = 0
 
@@ -33,26 +32,29 @@ all_sprites.add(character)
 enemy_img = pygame.image.load(ENEMY_IMAGE)
 rock_img = pygame.image.load(ROCK_IMAGE)
 bones_img = pygame.image.load(BONES_IMAGE)
-moeda_img = pygame.image.load(MOEDA_IMAGE)
+coin_img = pygame.image.load(COIN_IMAGE)
 coin_spawn = False
-pocao_img = pygame.image.load(POCAO_IMAGE)
+potion_img = pygame.image.load(POTION_IMAGE)
 potion_spawn = False
-escudo_img = pygame.image.load(ESCUDO_IMAGE)
+shield_img = pygame.image.load(SHIELD_IMAGE)
 shield_spawn = False
 
-rock = StaticObject(rock_img, 250, 400)
 
-x_moeda = randint(80, 950)
-y_moeda = randint(80, 750)
-moeda = StaticObject(moeda_img, x_moeda, y_moeda)
+x_coin = randint(80, 950)
+y_coin = randint(80, 750)
+coin = StaticObject(coin_img, x_coin, y_coin)
 
-x_pocao = randint(80, 950)
-y_pocao = randint(80, 750)
-pocao = StaticObject(pocao_img, x_pocao, y_pocao)
+x_potion = randint(80, 950)
+y_potion = randint(80, 750)
+potion = StaticObject(potion_img, x_potion, y_potion)
 
-x_escudo = randint(80, 950)
-y_escudo = randint(80, 750)
-escudo = StaticObject(escudo_img, x_escudo, y_escudo)
+x_shield = randint(80, 950)
+y_shield = randint(80, 750)
+shield = StaticObject(shield_img, x_shield, y_shield)
+
+obstacles = [
+    StaticObject(rock_img, 250, 400),
+]
 
 enemies = [
     Enemy(enemy_img, 500, 300, 20),
@@ -60,6 +62,8 @@ enemies = [
 
 drops = []
 
+stop = False
+defeat = False
 running = True
 while running:
     CLOCK.tick(60)
@@ -71,33 +75,29 @@ while running:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 character.attack()
-
         move_player(event, character)
 
-    character.update()
-    for enemy in enemies:
-        enemy.update(character)
+    if not stop:
+        character.update(obstacles)
+
+        for enemy in enemies:
+            enemy.update(character)
 
     for enemy in enemies:
         if character.is_attack and character.rect.colliderect(enemy.rect):
-            print("Enemy hit!")
             enemy.take_damage(10)
             character.is_attack = False  # Reset attacking state
 
-    screen.fill((0, 12, 0))
+    screen.blit(DUNGEON_SCREEN, (0, 0))
 
     character.draw(screen)
-    rock.draw(screen)
-    moeda.draw(screen)
-    pocao.draw(screen)
-    escudo.draw(screen)
+    coin.draw(screen)
+    potion.draw(screen)
+    shield.draw(screen)
 
-    mensage = f'Moedas: {character.coins}'
-    mensage1 = f'Poção: {character.potions}'
-    mensage2 = f'Escudo: {character.shields}'
+    mensage = f'Coins: {character.coins}'
     text_format = fonte.render(mensage, False, (255, 255, 255))
-    text_format1 = fonte.render(mensage1, False, (255, 255, 255))
-    text_format2 = fonte.render(mensage2, False, (255, 255, 255))
+
     alive_enemies = []
 
     for enemy in enemies:
@@ -110,78 +110,90 @@ while running:
             alive_enemies.append(enemy)
     enemies = alive_enemies
 
+    for obstacle in obstacles:
+        obstacle.draw(screen)
+
     for enemy in enemies:
         enemy.draw(screen)
 
     for drop in drops:
         drop.draw(screen)
 
-    collision(character, rock)
-    if character.rect.colliderect(moeda):
+    if character.rect.colliderect(coin):
         character.coins = character.coins + 1
-        x_moeda = -100
-        y_moeda = -100
-        moeda = StaticObject(moeda_img, x_moeda, y_moeda)
+        x_coin = -100
+        y_coin = -100
+        coin = StaticObject(coin_img, x_coin, y_coin)
         coin_spawn_time = time.time()
         coin_spawn = True
 
     if coin_spawn:
         coin_elapsed_time = time.time() - coin_spawn_time
         if coin_elapsed_time > 5:
-            x_moeda = randint(80, 950)
-            y_moeda = randint(80, 750)
-            moeda = StaticObject(moeda_img, x_moeda, y_moeda)
+            x_coin = randint(80, 950)
+            y_coin = randint(80, 750)
+            coin = StaticObject(coin_img, x_coin, y_coin)
             coin_spawn = False
 
-    if character.rect.colliderect(pocao):
+    if character.rect.colliderect(potion):
         character.potions = character.potions + 1
         character.heal(10)
-        x_pocao = -100
-        y_pocao = -100
-        pocao = StaticObject(pocao_img, x_pocao, y_pocao)
+        x_potion = -100
+        y_potion = -100
+        potion = StaticObject(potion_img, x_potion, y_potion)
         potion_spawn_time = time.time()
         potion_spawn = True
 
     if potion_spawn:
         potion_elapsed_time = time.time() - potion_spawn_time
         if potion_elapsed_time > 5:
-            x_pocao = randint(80, 950)
-            y_pocao = randint(80, 750)
-            pocao = StaticObject(pocao_img, x_pocao, y_pocao)
+            x_potion = randint(80, 950)
+            y_potion = randint(80, 750)
+            potion = StaticObject(potion_img, x_potion, y_potion)
             potion_spawn = False
 
-    if character.rect.colliderect(escudo):
+    if character.rect.colliderect(shield):
         character.shield()
         character.shields = character.shields + 1
-        x_escudo = -100
-        y_escudo = -100
-        escudo = StaticObject(escudo_img, x_escudo, y_escudo)
+        x_shield = -100
+        y_shield = -100
+        shield = StaticObject(shield_img, x_shield, y_shield)
         shield_spawn_time = time.time()
         shield_spawn = True
 
     if shield_spawn:
         shield_elapsed_time = time.time() - shield_spawn_time
         if shield_elapsed_time > 10:
-            x_escudo = randint(80, 950)
-            y_escudo = randint(80, 750)
-            escudo = StaticObject(escudo_img, x_escudo, y_escudo)
+            x_shield = randint(80, 950)
+            y_shield = randint(80, 750)
+            shield = StaticObject(shield_img, x_shield, y_shield)
             shield_spawn = False
 
     if character.is_shield:
         character.elapsed_time = time.time() - character.invulnerability_start
         if character.elapsed_time > character.invulnerability_time:
-            print("its over")
             character.is_shield = False
 
     if character.is_dead():
-        show_defeat(character=character)
+        stop = True
+        defeat = True
 
     if character.won():
-        show_win(character=character)
+        stop = True
 
-    screen.blit(text_format, (750, 10))
-    screen.blit(text_format1, (750, 50))
-    screen.blit(text_format2, (750, 90))
+    if stop:
+        if defeat:
+            response = show_defeat()
+        else:
+            response = show_win()
+        if response == "restart":
+            character.reset()
+            defeat = False
+            stop = False
+
+    if not stop:
+        screen.blit(text_format, (750, 10))
+
     pygame.display.flip()
 
 pygame.quit()
