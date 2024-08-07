@@ -3,49 +3,25 @@ import time
 from settings import BONES_IMAGE
 from characters.drop import Drop
 
-spritesheet_path = "assets/characters/BOSS.png"
 item_drop = pygame.image.load(BONES_IMAGE)
+move_sprites_paths = [
+    r"assets/characters/moveB1.png",]
+
+attack_sprites_paths = []
 
 class Boss(pygame.sprite.Sprite):
-    def __init__(self, x, y, spritesheet_path, life_Boss, collectible=item_drop):
+    def __init__(self, x, y, move_sprites_paths, attack_sprites_paths, life_Boss, collectible=item_drop):
         super().__init__()
 
-        self.sprite_size = (32, 32)  # Tamanho dos sprites individuais na folha
-        self.num_move_sprites = 12  # Número de sprites de movimento por linha
-        self.num_attack_sprites = 12  # Número de sprites de ataque por linha
+       # Carregar imagens individuais para os sprites de movimento e ataque
+        self.move_sprites = [pygame.image.load(path).convert_alpha() for path in move_sprites_paths]
+        self.attack_sprites = [pygame.image.load(path).convert_alpha() for path in attack_sprites_paths]
 
-        self.move_sprites = []
-        self.attack_sprites = []
-
-        # Carregar a folha de sprites usando o caminho fornecido
-        self.spritesheet = pygame.image.load(spritesheet_path).convert_alpha()
-        spritesheet_width, spritesheet_height = self.spritesheet.get_size()
-
-        # Verificar se a folha de sprites tem espaço suficiente para todos os sprites
-        if spritesheet_width < self.num_move_sprites * self.sprite_size[0] or spritesheet_height < 2 * self.sprite_size[1]:
-            raise ValueError("A folha de sprites é menor do que o esperado.")
-
-        # Carregar sprites de movimento (primeira linha da folha)
-        for i in range(self.num_move_sprites):
-            rect = pygame.Rect(i * self.sprite_size[0], 0, self.sprite_size[0], self.sprite_size[1])
-            if rect.right > spritesheet_width or rect.bottom > spritesheet_height:
-                raise ValueError("O retângulo para o subsurface está fora dos limites da folha de sprites.")
-            img = self.spritesheet.subsurface(rect)
-            self.move_sprites.append(pygame.transform.scale(img, self.sprite_size))
-
-        # Carregar sprites de ataque (segunda linha da folha)
-        for i in range(self.num_attack_sprites):
-            rect = pygame.Rect(i * self.sprite_size[0], self.sprite_size[1], self.sprite_size[0], self.sprite_size[1])
-            if rect.right > spritesheet_width or rect.bottom > spritesheet_height:
-                raise ValueError("O retângulo para o subsurface está fora dos limites da folha de sprites.")
-            img = self.spritesheet.subsurface(rect)
-            self.attack_sprites.append(pygame.transform.scale(img, self.sprite_size))
-
-        if self.move_sprites:
-            self.image = self.move_sprites[0]
-        else:
+        if not self.move_sprites:
             raise ValueError("Nenhuma sprite de movimento foi carregada.")
 
+        
+        self.image = self.move_sprites[0]
         self.rect = self.image.get_rect(topleft=(x, y))
         self.life_Boss = life_Boss
         self.attack_range = 50

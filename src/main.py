@@ -5,7 +5,7 @@ import pygame
 
 from characters.enemy import Enemy
 from characters.player import Player
-from characters.boss import Boss, spritesheet_path
+from characters.boss import Boss, move_sprites_paths, attack_sprites_paths
 from characters.static_objects import StaticObject
 from functions.collision import collision
 from functions.move import move_player
@@ -40,7 +40,7 @@ character = Player(0, 300)
 all_sprites.add(character)
 
 # Junta e adiciona os sprites ao Boss
-boss = Boss(32, 32, spritesheet_path, 20) 
+boss = Boss(32, 32, move_sprites_paths, attack_sprites_paths, 100) 
 all_sprites.add(boss) 
 
 enemy_img = pygame.image.load(ENEMY_IMAGE)
@@ -107,7 +107,7 @@ while running:
  
     if boss.life_Boss > 0 and contador > 3:
         boss.update(character)  
-    else:
+    elif boss.life_Boss <= 0:
          # Se o boss foi derrotado  
           for drop_item in range(verification):
             verification -= 1
@@ -122,7 +122,7 @@ while running:
     screen.fill((0, 12, 0))
     
     # O boss só vai ser desenhado após o player derrotar um número expecífico de inimigos
-    if contador > 3:
+    if contador > 3 and boss.life_Boss > 0:
         boss.draw(screen)
         all_sprites.draw(screen)
     
