@@ -176,3 +176,15 @@ class Player(pygame.sprite.Sprite):
 
         pygame.draw.rect(surface, GREEN, (health_bar_x, health_bar_y,
                          health_bar_width * health_ratio, health_bar_height))
+
+    def reset(self):
+        self.current_health = self.max_health
+        self.rect.topleft = (100, 100)
+        self.is_shield = False
+        self.invulnerability_start = 0
+        self.is_attack = False
+        self.is_moving = False
+        self.direction = pygame.Vector2(0, 0)
+        self.index = 0
+        self.last_direction = "right"
+        self.image = self.idle_right[self.index]

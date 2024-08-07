@@ -107,7 +107,7 @@ while running:
             drops.append(enemy.drop())
             x_enemy = randint(50, 950)
             y_enemy = randint(50, 750)
-            enemies.append(Enemy(enemy_img, y_enemy, 300, 20),) 
+            enemies.append(Enemy(enemy_img, y_enemy, 300, 20),)
         else:
             alive_enemies.append(enemy)
     enemies = alive_enemies
@@ -143,7 +143,7 @@ while running:
         pocao = StaticObject(pocao_img, x_pocao, y_pocao)
         potion_spawn_time = time.time()
         potion_spawn = True
-    
+
     if potion_spawn:
         potion_elapsed_time = time.time() - potion_spawn_time
         if potion_elapsed_time > 5:
@@ -177,9 +177,7 @@ while running:
             character.is_shield = False
 
     if character.is_dead():
-        show_defeat()
-        
-        #running = False
+        show_defeat(character=character)
 
     screen.blit(text_format, (750, 10))
     screen.blit(text_format1, (750, 50))
