@@ -4,6 +4,7 @@ def collision(character, obstacle):
             character.rect.right = obstacle.rect.left
         elif character.direction.x < 0:
             character.rect.left = obstacle.rect.right
+
         if character.direction.y > 0:
             character.rect.bottom = obstacle.rect.top
         elif character.direction.y < 0:

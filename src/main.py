@@ -40,7 +40,6 @@ potion_spawn = False
 escudo_img = pygame.image.load(ESCUDO_IMAGE)
 shield_spawn = False
 
-rock = StaticObject(rock_img, 250, 400)
 
 x_moeda = randint(80, 950)
 y_moeda = randint(80, 750)
@@ -53,6 +52,10 @@ pocao = StaticObject(pocao_img, x_pocao, y_pocao)
 x_escudo = randint(80, 950)
 y_escudo = randint(80, 750)
 escudo = StaticObject(escudo_img, x_escudo, y_escudo)
+
+obstacles = [
+    StaticObject(rock_img, 250, 400),
+]
 
 enemies = [
     Enemy(enemy_img, 500, 300, 20),
@@ -74,20 +77,18 @@ while running:
 
         move_player(event, character)
 
-    character.update()
+    character.update(obstacles)
     for enemy in enemies:
         enemy.update(character)
 
     for enemy in enemies:
         if character.is_attack and character.rect.colliderect(enemy.rect):
-            print("Enemy hit!")
             enemy.take_damage(10)
             character.is_attack = False  # Reset attacking state
 
     screen.fill((0, 12, 0))
 
     character.draw(screen)
-    rock.draw(screen)
     moeda.draw(screen)
     pocao.draw(screen)
     escudo.draw(screen)
@@ -110,13 +111,15 @@ while running:
             alive_enemies.append(enemy)
     enemies = alive_enemies
 
+    for obstacle in obstacles:
+        obstacle.draw(screen)
+
     for enemy in enemies:
         enemy.draw(screen)
 
     for drop in drops:
         drop.draw(screen)
 
-    collision(character, rock)
     if character.rect.colliderect(moeda):
         character.coins = character.coins + 1
         x_moeda = -100
@@ -170,7 +173,6 @@ while running:
     if character.is_shield:
         character.elapsed_time = time.time() - character.invulnerability_start
         if character.elapsed_time > character.invulnerability_time:
-            print("its over")
             character.is_shield = False
 
     if character.is_dead():
