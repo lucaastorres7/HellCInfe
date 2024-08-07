@@ -9,7 +9,7 @@ def show_menu(screen):
     pygame.mixer.music.load("assets/audios/highoctane.mp3")
     pygame.mixer.music.play(-1)
 
-    background_img = pygame.image.load("assets/backgrounds/castelo.jpg")
+    background_img = pygame.image.load("assets/backgrounds/castle.jpg")
     hellcinfe_img = pygame.image.load("assets/backgrounds/hellcinfe_logo.png")
 
     som_ativado = pygame.image.load("assets/assetsmenu/somativado.png")

@@ -7,6 +7,31 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
 
+        self.idle_right = []
+        self.idle_left = []
+        self.right_attack_sprt = []
+        self.left_attack_sprt = []
+
+        sprite_movement(PLAYER_SPRITESHEET, 'idle', 0, self.idle_right)
+
+        sprite_movement(PLAYER_SPRITESHEET, 'idle', 16, self.idle_left)
+
+        sprite_movement(PLAYER_SPRITESHEET, 'attack',
+                        64, self.right_attack_sprt)
+
+        sprite_movement(PLAYER_SPRITESHEET, 'attack',
+                        80, self.left_attack_sprt)
+
+        self.index = 0
+        self.speed = 4
+        self.direction = pygame.Vector2(0, 0)
+        self.is_moving = False
+        self.last_direction = "right"
+
+        self.image = self.idle_right[self.index]
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (x, y)
+
         self.current_health = HEALTH
         self.max_health = HEALTH
 
@@ -15,19 +40,9 @@ class Player(pygame.sprite.Sprite):
         self.shields = 0
         self.is_attack = False
 
-        self.idle_right = []
-        sprite_movement(PLAYER_SPRITESHEET, 'idle', 0, self.idle_right)
-
-        self.idle_left = []
-        sprite_movement(PLAYER_SPRITESHEET, 'idle', 16, self.idle_left)
-
-        self.right_attack_sprt = []
-        sprite_movement(PLAYER_SPRITESHEET, 'attack',
-                        64, self.right_attack_sprt)
-
-        self.left_attack_sprt = []
-        sprite_movement(PLAYER_SPRITESHEET, 'attack',
-                        80, self.left_attack_sprt)
+        self.is_shield = False
+        self.invulnerability_time = 3
+        self.invulnerability_start = 0
 
         self.moving_right_sprt = []
         sprite_movement(
@@ -36,18 +51,6 @@ class Player(pygame.sprite.Sprite):
         self.moving_left_sprt = []
         sprite_movement(
             PLAYER_SPRITESHEET, 'moving', 48, self.moving_left_sprt)
-
-        self.index = 0
-        self.image = self.idle_right[self.index]
-        self.rect = self.image.get_rect()
-        self.rect.topleft = (x, y)
-        self.speed = 4
-        self.direction = pygame.Vector2(0, 0)
-        self.is_moving = False
-        self.last_direction = "right"  # Default direction
-        self.is_shield = False
-        self.invulnerability_time = 3
-        self.invulnerability_start = 0
 
     def attack(self):
         self.is_attack = True
@@ -81,21 +84,26 @@ class Player(pygame.sprite.Sprite):
             if self.direction.x == 1:
                 if self.index > 4:
                     self.index = 0
+
                 self.image = self.moving_right_sprt[int(self.index)]
                 self.index += 0.1
                 self.last_direction = "right"
+
             elif self.direction.x == -1:
                 if self.index > 4:
                     self.index = 0
+
                 self.image = self.moving_left_sprt[int(self.index)]
                 self.index += 0.1
                 self.last_direction = "left"
+
             elif self.direction.y == 1 or self.direction.y == -1:
                 if self.index > 4:
                     self.index = 0
 
                 if self.last_direction == "right":
                     self.image = self.moving_right_sprt[int(self.index)]
+
                 elif self.last_direction == "left":
                     self.image = self.moving_left_sprt[int(self.index)]
                 self.index += 0.1
@@ -135,6 +143,7 @@ class Player(pygame.sprite.Sprite):
                         self.rect.right = obstacle.rect.left
                     elif self.direction.x < 0:  # Moving left
                         self.rect.left = obstacle.rect.right
+
                 elif direction == 'vertical':
                     if self.direction.y > 0:  # Moving down
                         self.rect.bottom = obstacle.rect.top
