@@ -1,14 +1,16 @@
+import sys
+from random import randint
+
+import pygame
+
+from characters.enemy import Enemy
+from characters.player import Player
 from characters.static_objects import StaticObject
 from functions.move import move_player
-from characters.player import Player
-from characters.enemy import Enemy
+from settings import *
 from ui.defeat import show_defeat
 from ui.menu import show_menu
 from ui.win import show_win
-from random import randint
-from settings import *
-import pygame
-import sys
 
 pygame.init()
 
@@ -53,7 +55,10 @@ y_shield = randint(80, 750)
 shield = StaticObject(shield_img, x_shield, y_shield)
 
 obstacles = [
-    StaticObject(rock_img, 250, 400),
+    StaticObject(rock_img, randint(40, 950), randint(40, 750)),
+    StaticObject(rock_img, randint(40, 950), randint(40, 750)),
+    StaticObject(rock_img, randint(40, 950), randint(40, 750)),
+    StaticObject(rock_img, randint(40, 950), randint(40, 750)),
 ]
 
 enemies = [
@@ -103,9 +108,15 @@ while running:
     for enemy in enemies:
         if enemy.is_dead():
             drops.append(enemy.drop())
-            x_enemy = randint(50, 950)
-            y_enemy = randint(50, 750)
-            enemies.append(Enemy(enemy_img, y_enemy, 300, 20),)
+            if quant_deads % 4 == 0:
+                for i in range(2):
+                    x_enemy = randint(50, 950)
+                    y_enemy = randint(50, 750)
+                    enemies.append(Enemy(enemy_img, y_enemy, 300, 20),)
+            else:
+                x_enemy = randint(50, 950)
+                y_enemy = randint(50, 750)
+                enemies.append(Enemy(enemy_img, y_enemy, 300, 20),)
         else:
             alive_enemies.append(enemy)
     enemies = alive_enemies
