@@ -13,6 +13,9 @@ BONES_IMAGE = 'assets/backgrounds/bones.png'
 MOEDA_IMAGE = 'assets/backgrounds/moeda.png'
 POCAO_IMAGE = 'assets/backgrounds/pocao.png'
 ESCUDO_IMAGE = 'assets/backgrounds/escudo.png'
+derrota_img = pygame.image.load("assets/backgrounds/teladederrotabackground.jpg")
+derrota_button_img = pygame.image.load("assets/assetsmenu/restartbutton.png")
+quit_derrota_img = pygame.image.load("assets/assetsmenu/quitderrotabutton.png")
 
 CLOCK = pygame.time.Clock()
 
